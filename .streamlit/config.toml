@@ -1,0 +1,26 @@
+[theme]
+# Primary color for interactive elements
+primaryColor = "#2F3AE4"
+
+# Background color for the main content area
+backgroundColor = "#0e1117"
+
+# Background color used for the sidebar and most interactive widgets
+secondaryBackgroundColor = "#1e2130"
+
+# Color used for almost all text
+textColor = "#fafafa"
+
+# Font family for all text in the app
+font = "sans serif"
+
+[server]
+# Disable file watchers to prevent unnecessary reloads
+fileWatcherType = "none"
+
+# Disable CORS protection for local development
+enableCORS = false
+enableXsrfProtection = false
+
+# Enable WebSocket compression
+enableWebsocketCompression = true

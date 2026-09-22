@@ -1,0 +1,28 @@
+[Unit]
+Description=CloudWatch Sentinel - Automated Log Analysis
+Documentation=https://github.com/mk-elbaz/CloudwatchSentinel
+After=network.target mysql.service
+Wants=mysql.service
+
+[Service]
+Type=oneshot
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/opt/cloudwatch-sentinel
+Environment="PATH=/opt/cloudwatch-sentinel/venv/bin:/usr/local/bin:/usr/bin:/bin"
+EnvironmentFile=/opt/cloudwatch-sentinel/.env
+
+# Run scheduler once
+ExecStart=/opt/cloudwatch-sentinel/venv/bin/python /opt/cloudwatch-sentinel/scheduler.py
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=cloudwatch-sentinel-scheduler
+
+# Security hardening
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

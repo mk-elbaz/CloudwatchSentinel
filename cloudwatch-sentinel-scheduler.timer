@@ -1,0 +1,23 @@
+[Unit]
+Description=CloudWatch Sentinel - Hourly Analysis Timer
+Documentation=https://github.com/mk-elbaz/CloudwatchSentinel
+Requires=cloudwatch-sentinel-scheduler.service
+
+[Timer]
+# Run every hour on the hour
+OnCalendar=hourly
+
+# Alternative: Run at 5 minutes past every hour (avoids top-of-hour load)
+# OnCalendar=*:05:00
+
+# If system was offline, run missed executions on next boot
+Persistent=true
+
+# Run 2 minutes after boot for initial test
+OnBootSec=2min
+
+# Randomize start time by up to 5 minutes to avoid thundering herd
+# RandomizedDelaySec=5min
+
+[Install]
+WantedBy=timers.target

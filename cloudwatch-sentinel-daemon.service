@@ -1,0 +1,38 @@
+[Unit]
+Description=CloudWatch Sentinel - Continuous Daemon Mode
+Documentation=https://github.com/mk-elbaz/CloudwatchSentinel
+After=network.target mysql.service
+Wants=mysql.service
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/opt/cloudwatch-sentinel
+Environment="PATH=/opt/cloudwatch-sentinel/venv/bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/sbin"
+EnvironmentFile=/opt/cloudwatch-sentinel/.env
+
+# Run in daemon mode (continuous, checks every 60 minutes)
+ExecStart=/opt/cloudwatch-sentinel/venv/bin/python /opt/cloudwatch-sentinel/scheduler.py --daemon --interval 60
+
+# Restart on failure
+Restart=always
+RestartSec=60
+StartLimitBurst=3
+StartLimitIntervalSec=300
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=cloudwatch-sentinel-daemon
+
+# Security hardening
+NoNewPrivileges=true
+PrivateTmp=true
+
+# Resource limits (optional - adjust based on your needs)
+# MemoryLimit=512M
+# CPUQuota=50%
+
+[Install]
+WantedBy=multi-user.target

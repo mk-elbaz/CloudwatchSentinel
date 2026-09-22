@@ -1,0 +1,38 @@
+[Unit]
+Description=CloudWatch Sentinel - Dashboard (Streamlit UI)
+Documentation=https://github.com/mk-elbaz/CloudwatchSentinel
+After=network.target mysql.service
+Wants=mysql.service
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/opt/cloudwatch-sentinel
+Environment="PATH=/opt/cloudwatch-sentinel/venv/bin:/usr/local/bin:/usr/bin:/bin"
+EnvironmentFile=/opt/cloudwatch-sentinel/.env
+
+# Start Streamlit Dashboard
+ExecStart=/opt/cloudwatch-sentinel/venv/bin/streamlit run dashboard.py \
+    --server.port=8501 \
+    --server.address=0.0.0.0 \
+    --server.headless=true \
+    --browser.gatherUsageStats=false
+
+# Restart configuration
+Restart=always
+RestartSec=10
+
+# Security hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/cloudwatch-sentinel
+PrivateTmp=true
+
+# Resource limits (adjust as needed)
+MemoryLimit=512M
+CPUQuota=50%
+
+[Install]
+WantedBy=multi-user.target
